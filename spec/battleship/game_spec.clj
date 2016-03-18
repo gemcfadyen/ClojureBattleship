@@ -19,6 +19,9 @@
  :cruiser :hit
  :destroyer :untouched}
 
+(def simple-game
+  {:submarine #{:B1} :destroyer #{:A1 :A2}})
+
 (def ships
   {:submarine #{:A1}})
 
@@ -60,4 +63,10 @@
           (it "plays until won"
                (should-contain "Destroyer sunk!\nSubmarine sunk!\n\nGame over, well done!"
                                (with-out-str (with-in-str "A1\nA2\nB1\n"
-                                               (play-game {:submarine #{:B1} :destroyer #{:A1 :A2}} #{}))))))
+                                               (play-game simple-game #{}))))))
+
+(describe :display-grid
+          (it "displays new grid"
+              (should= " 12\nA  \nB  \n" (display-grid 2 #{} simple-game )))
+         (it "displays grid with hit"
+             (should= " 12\nAX \nBX/\n" (display-grid 2 #{:A1 :B1 :B2} simple-game))))

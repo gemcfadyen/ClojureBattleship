@@ -40,6 +40,26 @@
 (defn format-ships [statuses]
   (apply str (map format-ship (sort-by first statuses))))
 
+(def alphabet "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+(defn- all-ship-squares [ships]
+  (apply sets/union (map val ships)))
+
+(defn- display-square [guesses ships letter number]
+  (let [coord (keyword (str letter (inc number)))]
+    (if-not (some #{coord} guesses)
+      " "
+      (if (some #{coord} (all-ship-squares ships))
+        "X"
+        "/"))))
+
+(defn- display-cell [size guesses ships letter]
+  (str letter (apply str (map (partial display-square guesses ships letter) (range size))) "\n"))
+
+(defn display-grid [size guesses ships]
+  (str " " (apply str (range 1 (inc size))) "\n"
+       (apply str (map (partial display-cell size guesses ships) (take size alphabet)))))
+
 (defn play-game [ships previous-guesses]
  (let [guess (keyword (read-line))
        statuses (play-guess guess previous-guesses ships)]
