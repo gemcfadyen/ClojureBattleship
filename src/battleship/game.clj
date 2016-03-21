@@ -1,6 +1,6 @@
 (ns battleship.game
   (:require [clojure.set :as sets])
- (:gen-class) )
+  (:gen-class) )
 
 (defn- ship-contains-coord? [guess [ship-name coordinates]]
   (when (coordinates guess) ship-name))
@@ -61,15 +61,17 @@
        (apply str (map (partial display-cell size guesses ships) (take size alphabet)))))
 
 (defn play-game [ships previous-guesses]
- (let [guess (keyword (read-line))
-       statuses (play-guess guess previous-guesses ships)]
-   (println (format-ships (first statuses)))
+  (let [guess (keyword (read-line))
+        statuses (play-guess guess previous-guesses ships)]
+    (println "---------------")
+    (println (display-grid 2 (second statuses) ships))
+    (println (format-ships (first statuses)))
 
-   (if (game-over? (first statuses))
-     (println "Game over, well done!")
-     (play-game ships (second statuses))
-     )
-   ))
+    (if (game-over? (first statuses))
+      (println "Game over, well done!")
+      (play-game ships (second statuses))
+      )
+    ))
 
 (defn -main []
   (play-game {:submarine #{:A1} :destroyer #{:B1 :B2}} #{}))

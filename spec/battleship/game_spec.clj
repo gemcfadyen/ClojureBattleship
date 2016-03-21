@@ -63,10 +63,15 @@
           (it "plays until won"
                (should-contain "Destroyer sunk!\nSubmarine sunk!\n\nGame over, well done!"
                                (with-out-str (with-in-str "A1\nA2\nB1\n"
-                                               (play-game simple-game #{}))))))
+                                               (play-game simple-game #{})))))
+
+          (it "displays grid when playing game"
+              (should-contain " 12\nAXX\nBX \n"
+                              (with-out-str (with-in-str "A1\nA2\nB1\n"
+                                              (play-game simple-game #{}))))))
 
 (describe :display-grid
           (it "displays new grid"
               (should= " 12\nA  \nB  \n" (display-grid 2 #{} simple-game )))
-         (it "displays grid with hit"
+          (it "displays grid with hit"
              (should= " 12\nAX \nBX/\n" (display-grid 2 #{:A1 :B1 :B2} simple-game))))
